@@ -1,0 +1,11 @@
+{
+  "name": "ventilator-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "RSI checklist and Hamilton T1 initial ventilator settings guide",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node --test tests/*.test.mjs"
+  }
+}

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>RSI &amp; Hamilton T1 Vent Guide</title>
+  <meta name="description" content="Step-by-step RSI checklist and condition-based initial settings for the Hamilton T1 transport ventilator.">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-title">RSI → Hamilton T1</span>
+      <span class="brand-sub" id="patient-summary">No patient entered</span>
+    </div>
+    <div class="clock" id="rsi-clock">
+      <button type="button" id="clock-btn" class="clock-btn">Start RSI clock</button>
+      <span id="clock-time" class="clock-time" hidden>00:00</span>
+    </div>
+  </header>
+
+  <div class="disclaimer" id="disclaimer">
+    <strong>Clinical reference only.</strong> Starting points for trained providers. Always follow your local protocols,
+    medical direction, and the Hamilton T1 operator's manual. Verify every dose and setting.
+    <button type="button" id="dismiss-disclaimer" aria-label="Dismiss">OK</button>
+  </div>
+
+  <main>
+    <section id="tab-patient" class="tab" data-tab="patient">
+      <h1>Patient</h1>
+      <form id="patient-form" class="card form" autocomplete="off">
+        <fieldset class="row">
+          <legend>Sex</legend>
+          <label class="seg"><input type="radio" name="sex" value="male" checked><span>Male</span></label>
+          <label class="seg"><input type="radio" name="sex" value="female"><span>Female</span></label>
+        </fieldset>
+
+        <div class="row two">
+          <label>Height
+            <span class="with-unit">
+              <input type="number" name="height" inputmode="decimal" min="0" step="any" placeholder="e.g. 175">
+              <select name="heightUnit"><option value="cm">cm</option><option value="in">in</option></select>
+            </span>
+          </label>
+          <label>Weight
+            <span class="with-unit">
+              <input type="number" name="weight" inputmode="decimal" min="0" step="any" placeholder="e.g. 80">
+              <select name="weightUnit"><option value="kg">kg</option><option value="lb">lb</option></select>
+            </span>
+          </label>
+        </div>
+
+        <div class="row three">
+          <label>HR <input type="number" name="hr" inputmode="numeric" min="0" placeholder="/min"></label>
+          <label>SBP <input type="number" name="sbp" inputmode="numeric" min="0" placeholder="mmHg"></label>
+          <label>SpO₂ <input type="number" name="spo2" inputmode="numeric" min="0" max="100" placeholder="%"></label>
+        </div>
+
+        <label>Primary condition
+          <select name="condition" id="condition-select"></select>
+        </label>
+        <p class="hint" id="condition-examples"></p>
+
+        <details class="more">
+          <summary>Optional: acid-base data (metabolic acidosis)</summary>
+          <div class="row three">
+            <label>Pre-intubation RR <input type="number" name="preRate" inputmode="numeric" min="0" placeholder="/min"></label>
+            <label>Pre-intubation EtCO₂ <input type="number" name="preEtco2" inputmode="numeric" min="0" placeholder="mmHg"></label>
+            <label>HCO₃⁻ <input type="number" name="hco3" inputmode="numeric" min="0" placeholder="mEq/L"></label>
+          </div>
+        </details>
+
+        <div class="actions">
+          <button type="button" id="clear-patient" class="ghost">Clear patient</button>
+        </div>
+      </form>
+
+      <div id="patient-derived" class="card derived"></div>
+      <div id="patient-flags"></div>
+    </section>
+
+    <section id="tab-intubate" class="tab" data-tab="intubate" hidden>
+      <h1>Intubation (RSI)</h1>
+      <div id="intubate-flags"></div>
+      <div id="intubate-steps"></div>
+      <h2>Medications</h2>
+      <div id="drug-tables"></div>
+      <details class="card">
+        <summary><strong>Succinylcholine contraindications</strong></summary>
+        <ul id="sux-contra"></ul>
+      </details>
+      <div class="actions">
+        <button type="button" class="ghost" data-reset="intubate">Reset checklist</button>
+      </div>
+    </section>
+
+    <section id="tab-vent" class="tab" data-tab="vent" hidden>
+      <h1>Hamilton T1 settings</h1>
+      <div id="vent-settings"></div>
+      <h2>Setup steps</h2>
+      <div id="vent-steps"></div>
+      <h2>O₂ cylinder duration</h2>
+      <div class="card form" id="o2-calc">
+        <div class="row three">
+          <label>Cylinder
+            <select name="cyl"><option>D</option><option selected>E</option><option>M</option><option>H</option></select>
+          </label>
+          <label>Pressure <input type="number" name="psi" inputmode="numeric" placeholder="psi" value="2000"></label>
+          <label>FiO₂ % <input type="number" name="fio2" inputmode="numeric" placeholder="%" value="100"></label>
+        </div>
+        <p id="o2-result" class="result"></p>
+      </div>
+      <div class="actions">
+        <button type="button" class="ghost" data-reset="vent">Reset checklist</button>
+      </div>
+    </section>
+
+    <section id="tab-trouble" class="tab" data-tab="trouble" hidden>
+      <h1>Troubleshoot</h1>
+      <div id="trouble-list"></div>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="Sections">
+    <a href="#patient" data-nav="patient">Patient</a>
+    <a href="#intubate" data-nav="intubate">Intubate</a>
+    <a href="#vent" data-nav="vent">Vent</a>
+    <a href="#trouble" data-nav="trouble">Trouble</a>
+  </nav>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
